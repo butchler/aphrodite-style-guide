@@ -89,6 +89,12 @@ render() {
 
 This would go through the definitions of all of the composed styles and make sure that they share no properties (and throw an error if they do). If the checks pass, then it would be equivalent to just doing `container: [css(layout.centered), css(layout.wide), ...].join(' ')`.
 
+### Caveat about shorthand properties
+
+One caveat with this is that it wouldn't be easy to check for conflicts if you use CSS shorthand properties. For example, if one class uses the 'background' property and another uses the 'backgroundColor' property, you'd have to parse the property values to determine if they conflict or not.
+
+A simpler solution would be to just not allow any shorthand properties (background, font, margin, border, transition, animation, padding, and list-style, according to https://developer.mozilla.org/en-US/docs/Web/CSS/Shorthand_properties). This is probably a good idea anyway when trying to create reuseable/composeable classes.
+
 Higher-order composition
 ------------------------
 
