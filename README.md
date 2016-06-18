@@ -97,7 +97,7 @@ In order to do higher-order composition, you could just use arrays of composable
 ```
 export default {
   baseContainer: [layout.centered, layout.wide, border.roundedInset],
-  baseButton: [background.secondary, background.secondaryHover, color.primary]
+  baseButton: [background.secondary, background.secondaryHover, color.primary],
 };
 ```
 
@@ -117,4 +117,79 @@ And in reality composeStyles would probably just recursively flatten the arrays 
     container: [components.baseContainer, background.primaryGradient, color.secondary],
     button: [components.baseButton, layout.largeTopMargin]),
   });
+```
+
+"composes:" in Aphrodite
+------------------------
+
+It might be even better to create a complete wrapper around Aphrodite's API (or just a fork of Aphrodite) that adds a 'composes:' keyword just like CSS modules:
+
+`App.js:`
+```
+import React, { Component } from 'react';
+import { StyleSheet, css } from 'aphrodite-composes';
+import { layout, background, color, components } from './styles';
+
+class App extends Component {
+    render() {
+        const styles = {
+            container: css(layout.centered, layout.wide, background.primaryGradient, color.secondary, border.roundedInset),
+            button: css(background.secondary, background.secondaryHover, color.primary, layout.largeTopMargin),
+        };
+
+        return <div className={styles.container}>
+            <p>This is a button using only shared styles:</p>
+            <a className={styles.button}>Button</a>
+            
+            <p>This is a button with some styles that are only used on this component and nowhere else:</p>
+            <a className={styles.specialButton}>Special Button</a>
+        </div>;
+    }
+}
+
+const styles = StyleSheet.create({
+    container: { composes: [components.baseContainer, background.primaryGradient, color.secondary] }
+    button: { composes: [components.baseButton, layout.largeTopMargin] },
+    specialButton: {
+        composes: [components.baseButton],
+        color: #beefee,
+    },
+});
+```
+
+`styles.js:`
+```
+import { StyleSheet } from 'aphrodite-composes';
+
+const layout = StyleSheet.create({
+    block: {
+        display: 'block',
+    },
+    centered: {
+        // Strings could be used to reference styles within the same stylesheet.
+        composes: ['block'],
+        marginLeft: 'auto',
+        marginRight: 'auto',
+    },
+    ...
+});
+
+const color = StyleSheet.create({
+    ...
+});
+
+const background = StyleSheet.create({
+    ...
+});
+
+const border = StyleSheet.create({
+    ...
+});
+
+const components = StyleSheet.create({
+    baseContainer: { composes: [layout.centered, layout.wide, border.roundedInset] },
+    baseButton: { composes: [background.secondary, background.secondaryHover, color.primary] },
+});
+
+export default { layout, color, background, border, components };
 ```
