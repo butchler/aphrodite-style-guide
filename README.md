@@ -138,11 +138,6 @@ import { layout, background, color, components } from './styles';
 
 class App extends Component {
     render() {
-        const styles = {
-            container: css(layout.centered, layout.wide, background.primaryGradient, color.secondary, border.roundedInset),
-            button: css(background.secondary, background.secondaryHover, color.primary, layout.largeTopMargin),
-        };
-
         return <div className={styles.container}>
             <p>This is a button using only shared styles:</p>
             <a className={styles.button}>Button</a>
