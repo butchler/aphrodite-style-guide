@@ -7,6 +7,7 @@ Possible CSS modules style guide
   - Reason: Really just to force yourself to reuse styles as much as possible. Exceptions can be made if you're really sure that the style for that component won't be used anywhere else.
 * For component-specific classes, always use semantic class names (e.g. .container, .button, etc.). However, for shared classes that are meant to be composed, it's okay to use very specific names, like "bright-red", "wide-horizontal-padding", etc.
   - Reason: the idea is that class composition should theoretically be able to replace variables in CSS. Instead of having a $primary-color variable, you can have a .primary-color class that has nothing but "color: #xxxxxx;" in it. In order to be composable, most classes should only have one or two style definitions (however, you can make higher-order classes that are just compositions of other shared classes).
+* Use variables/@values for media queries, but try to avoid using them anywhere else unless it will really reduce duplication in a way that can't be done by just composing classes. (I'm really not sure how variables should best be used, so this rule is subject to change).
 
 
 Usage with Aphrodite
